@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         textView = findViewById(R.id.textView);
         ImageView cloudDownload = findViewById(R.id.cloudDownload);
         ImageView calendarTool = findViewById(R.id.calendarTool);
@@ -44,7 +43,6 @@ public class MainActivity extends AppCompatActivity
                 textView.setText("CloudDownload selected");
             }
         });
-
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +88,8 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public boolean onQueryTextChange(String s) {
+//                String query = getResources().getString(R.string.searching)+" \""+s+"\"";
+//                textView.setText(query);
                 return false;
             }
         });
