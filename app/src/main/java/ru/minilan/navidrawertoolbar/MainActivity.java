@@ -47,10 +47,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        initSettings(); // load shared prefs
+        loadSharedPreferences();
     }
 
-    private void initSettings() {
+    private void loadSharedPreferences() {
         sharedPreferences = getSharedPreferences(SETTINGS, MODE_PRIVATE);
         textViewDefaultTown.setText(sharedPreferences.getString(KEYTOWN, getResources().getString(R.string.deftown)));
     }
@@ -121,14 +121,14 @@ public class MainActivity extends AppCompatActivity
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                String query = getResources().getString(R.string.searching) + " \"" + s + "\"";
+                String query = getResources().getString(R.string.searching, s);
                 textView.setText(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-//                String query = getResources().getString(R.string.searching)+" \""+s+"\"";
+//                String query = getResources().getString(R.string.searching, s);
 //                textView.setText(query);
                 return false;
             }
