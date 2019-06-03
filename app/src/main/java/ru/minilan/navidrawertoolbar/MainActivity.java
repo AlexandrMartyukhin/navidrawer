@@ -1,5 +1,7 @@
 package ru.minilan.navidrawertoolbar;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,32 +21,69 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    TextView textView;
+    private TextView textView;
+    private TextView textViewDefaultTown;
+    private Toolbar toolbar;
+    private ImageView cloudDownload;
+    private ImageView calendarTool;
+    private FloatingActionButton fab;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+    private SharedPreferences sharedPreferences;
+    static final String KEYTOWN = "KEYTOWN";
+    static final String KEYSHOWPRESSURE = "KEYSHOWPRESSURE";
+    static final String SETTINGS = "SETTINGS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
+        viewFinder();
+        setListeners();
+        toolbarAndNavigationDrawerInit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadSharedPreferences();
+    }
+
+    private void loadSharedPreferences() {
+        sharedPreferences = getSharedPreferences(SETTINGS, MODE_PRIVATE);
+        textViewDefaultTown.setText(sharedPreferences.getString(KEYTOWN, getResources().getString(R.string.deftown)));
+    }
+
+    private void viewFinder() {
+        toolbar = findViewById(R.id.toolbar);
         textView = findViewById(R.id.textView);
-        ImageView cloudDownload = findViewById(R.id.cloudDownload);
-        ImageView calendarTool = findViewById(R.id.calendarTool);
+        textViewDefaultTown = findViewById(R.id.textViewDefaultTown);
+        cloudDownload = findViewById(R.id.cloudDownload);
+        calendarTool = findViewById(R.id.calendarTool);
+        fab = findViewById(R.id.fab);
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+
+    }
+
+    private void setListeners() {
         calendarTool.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 textView.setText("Calendar selected");
             }
         });
+
         cloudDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 textView.setText("CloudDownload selected");
+                Intent intent = new Intent(MainActivity.this, SimpleBrowser.class);
+                startActivity(intent);
             }
         });
 
-        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,9 +91,10 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+    }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+    private void toolbarAndNavigationDrawerInit() {
+        setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -81,14 +121,14 @@ public class MainActivity extends AppCompatActivity
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                String query = getResources().getString(R.string.searching)+" \""+s+"\"";
+                String query = getResources().getString(R.string.searching, s);
                 textView.setText(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-//                String query = getResources().getString(R.string.searching)+" \""+s+"\"";
+//                String query = getResources().getString(R.string.searching, s);
 //                textView.setText(query);
                 return false;
             }
@@ -107,6 +147,8 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             textView.setText("Menu settings pressed");
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         } else if (id == R.id.action_help) {
             textView.setText("Menu help pressed");
