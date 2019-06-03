@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
 
     private void initSettings() {
         sharedPreferences = getSharedPreferences(SETTINGS, MODE_PRIVATE);
-        textViewDefaultTown.setText(sharedPreferences.getString(KEYTOWN,getResources().getString(R.string.deftown)));
+        textViewDefaultTown.setText(sharedPreferences.getString(KEYTOWN, getResources().getString(R.string.deftown)));
     }
 
     private void viewFinder() {
@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity
         fab = findViewById(R.id.fab);
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+
     }
 
     private void setListeners() {
@@ -78,6 +79,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 textView.setText("CloudDownload selected");
+                Intent intent = new Intent(MainActivity.this, SimpleBrowser.class);
+                startActivity(intent);
             }
         });
 
