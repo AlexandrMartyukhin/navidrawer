@@ -11,7 +11,6 @@ public class SettingsActivity extends AppCompatActivity {
     private EditText town;
     private Switch switchPressure;
     private SharedPreferences sharedPreferences;
-    String valuesTown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +19,6 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         town = findViewById(R.id.editTextDefaultTown);
         switchPressure = findViewById(R.id.switchPressure);
-
         sharedPreferences = getSharedPreferences(MainActivity.SETTINGS,MODE_PRIVATE);
         loadPreferences(sharedPreferences);
     }
@@ -33,12 +31,11 @@ public class SettingsActivity extends AppCompatActivity {
 
 
     private void savePreferences(SharedPreferences sharedPreferences) {
-        valuesTown = town.getText().toString();
-        Boolean valueShowPressure = switchPressure.isChecked();
+
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(MainActivity.KEYTOWN, valuesTown);
-        editor.putBoolean(MainActivity.KEYSHOWPRESSURE, valueShowPressure);
-        editor.commit();
+        editor.putString(MainActivity.KEYTOWN, town.getText().toString());
+        editor.putBoolean(MainActivity.KEYSHOWPRESSURE, switchPressure.isChecked());
+        editor.apply();
     }
 
     private void loadPreferences(SharedPreferences sharedPreferences) {
