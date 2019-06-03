@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import javax.net.ssl.HttpsURLConnection;
 
 import okhttp3.Call;
@@ -111,6 +112,14 @@ public class SimpleBrowser extends AppCompatActivity {
                             call.enqueue(new Callback() {
                                 @Override
                                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                                    Log.e("MyTAG", "onFailure - " + e.getMessage());
+                                    final String error = e.getMessage();
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            webView.loadData(error, "text/html; charset=utf-8", "utf-8");
+                                        }
+                                    });
                                 }
 
                                 @Override
@@ -126,10 +135,8 @@ public class SimpleBrowser extends AppCompatActivity {
                             });
 
                         } catch (Exception e) {
-                            Log.e("MyTAG",e.getMessage());
+                            Log.e("MyTAG", e.getMessage());
                         }
-
-
 
 
                     }
